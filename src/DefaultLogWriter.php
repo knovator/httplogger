@@ -29,8 +29,10 @@ class DefaultLogWriter implements LogWriter
             return $file->getClientOriginalName();
         }, iterator_to_array($request->files));
 
-        $message = "{$method} {$uri} - Body: {$bodyAsJson} - Files: ".implode(', ', $files);
+        $message = "{$method} {$uri} - Body: {$bodyAsJson} - Files: " . implode(', ', $files);
 
-        Log::info($message);
+        $channel = config('http-logger.log_channel');
+
+        Log::channel($channel)->info('test');
     }
 }

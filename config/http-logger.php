@@ -21,5 +21,11 @@ return [
         'password',
         'password_confirmation',
     ],
-    
+
+    'log_channel' => 'custom_log',
+
+    'log_period' => 'daily',
+
+    'log_file_name' => 'custom',
+
 ];
