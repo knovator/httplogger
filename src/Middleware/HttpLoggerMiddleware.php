@@ -1,18 +1,18 @@
 <?php
 
-namespace knovator\logger\src\Middleware;
+namespace Knovators\HttpLogger\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use knovator\logger\src\LogProfile;
-use knovator\logger\src\LogWriter;
+use Knovators\HttpLogger\LogProfile;
+use Knovators\HttpLogger\LogWriter;
 
 
 /**
- * Class HttpLogger
- * @package knovator\logger\src\Middleware
+ * Class HttpLoggerMiddleware
+ * @package Knovators\HttpLogger\Middleware
  */
-class HttpLogger
+class HttpLoggerMiddleware
 {
     protected $logProfile;
     protected $logWriter;

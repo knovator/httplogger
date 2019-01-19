@@ -15,13 +15,13 @@ This log acts as an extra safety net for critical user submissions, such as form
 You can install the package via composer:
 
 ```bash
-composer require knovator/logger
+composer require knovators/httplogger
 ```
 
 Optionally you can publish the configfile with:
 
 ```bash
-php artisan vendor:publish --provider="knovator\logger\src\HttpLoggerServiceProvider" --tag="config" 
+php artisan vendor:publish --provider="knovators\logger\src\HttpLoggerServiceProvider" --tag="config" 
 ```
 
 This is the contents of the published config file:
@@ -29,25 +29,17 @@ This is the contents of the published config file:
 ```php
 return [
 
-    /*
-     * The log profile which determines whether a request should be logged.
-     * It should implement `LogProfile`.
-     */
-    'log_profile' =>\knovator\logger\src\LogNonGetRequests::class,
+   /*
+       * Filter out body fields which will never be logged.
+       */
+      'except' => [
+          'password',
+          'password_confirmation',
+      ],
+  
+      /* Default log channel.*/
+      'log_channel' => 'custom_log',
 
-    /*
-     * The log writer used to write the request to a log.
-     * It should implement `LogWriter`.
-     */
-    'log_writer' =>  \knovator\logger\src\DefaultLogWriter::class,
-
-    /*
-     * Filter out body fields which will never be logged.
-     */
-    'except' => [
-        'password',
-        'password_confirmation',
-    ],
 ];
 ```
 
@@ -61,7 +53,7 @@ This packages provides a middleware which can be added as a global middleware or
 protected $middleware = [
     // ...
     
-    \knovator\logger\src\Middlewares\HttpLogger::class
+    \Knovators\HttpLogger\Middleware\HttpLoggerMiddleware::class
 ];
 ```
 
@@ -70,7 +62,7 @@ protected $middleware = [
 
 Route::post('/submit-form', function () {
     //
-})->middleware(\knovator\logger\src\Middlewares\HttpLogger::class);
+})->middleware(\Knovators\HttpLogger\Middleware\HttpLoggerMiddleware::class);
 ```
 
 ### Logging
@@ -86,11 +78,11 @@ and it will write to the default Laravel logger.
 You're free to implement your own log profile and/or log writer classes, 
 and configure it in `config/http-logger.php`.
 
-A custom log profile must implement `\knovator\logger\src\LogProfile`. 
+A custom log profile must implement `\knovators\logger\src\LogProfile`. 
 This interface requires you to implement `shouldLogRequest`.
 
 ```php
-// Example implementation from `\knovator\logger\src\LogNonGetRequests`
+// Example implementation from `\knovators\logger\src\LogNonGetRequests`
 
 public function shouldLogRequest(Request $request): bool
 {
@@ -98,11 +90,11 @@ public function shouldLogRequest(Request $request): bool
 }
 ```
 
-A custom log writer must implement `\knovator\logger\src\LogWriter`. 
+A custom log writer must implement `\knovators\logger\src\LogWriter`. 
 This interface requires you to implement `logRequest`.
 
 ```php
-// Example implementation from `\knovator\logger\src\DefaultLogWriter`
+// Example implementation from `\knovators\http-logger\src\DefaultLogWriter`
 
 public function logRequest(Request $request): void
 {
@@ -114,7 +106,9 @@ public function logRequest(Request $request): void
 
     $message = "{$method} {$uri} - {$bodyAsJson}";
 
-    Log::info($message);
+    $channel = config('http-logger.log_channel');
+    
+    Log::channel($channel)->info($message);
 }
 ```
 

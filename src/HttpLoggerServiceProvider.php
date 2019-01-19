@@ -1,12 +1,12 @@
 <?php
 
-namespace knovator\logger\src;
+namespace Knovators\HttpLogger;
 
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class HttpLoggerServiceProvider
- * @package knovator\logger\src
+ * @package knovators\logger\src
  */
 class HttpLoggerServiceProvider extends ServiceProvider
 {
@@ -18,8 +18,8 @@ class HttpLoggerServiceProvider extends ServiceProvider
             ], 'config');
         }
 
-        $this->app->singleton(LogProfile::class, config('http-logger.log_profile'));
-        $this->app->singleton(LogWriter::class, config('http-logger.log_writer'));
+        $this->app->singleton(LogProfile::class, LogNonGetRequests::class);
+        $this->app->singleton(LogWriter::class, DefaultLogWriter::class);
     }
 
     public function register()

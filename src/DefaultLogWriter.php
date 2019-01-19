@@ -1,15 +1,14 @@
 <?php
 
-namespace knovator\logger\src;
+namespace Knovators\HttpLogger;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use knovator\logger\src\LogWriter;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class DefaultLogWriter
- * @package knovator\logger
+ * @package knovators\logger
  */
 class DefaultLogWriter implements LogWriter
 {
@@ -29,8 +28,11 @@ class DefaultLogWriter implements LogWriter
             return $file->getClientOriginalName();
         }, iterator_to_array($request->files));
 
-        $message = "{$method} {$uri} - Body: {$bodyAsJson} - Files: ".implode(', ', $files);
+        $message = "{$method} {$uri} - Body: {$bodyAsJson} - Files: " . implode(', ', $files);
 
-        Log::info($message);
+        $channel = config('http-logger.log_channel');
+
+
+        Log::channel($channel)->info($message);
     }
 }
