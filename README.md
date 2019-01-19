@@ -52,14 +52,7 @@ return [
     /* Default log channel.*/
      
     'log_channel' => 'custom_log',
-    
-    /* Default log period.*/
-    
-    'log_period' => 'daily',
-        
-    /* Default log file name.*/
-    
-    'log_file_name' => 'custom',
+
 ];
 ```
 
