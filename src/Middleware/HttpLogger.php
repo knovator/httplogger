@@ -1,6 +1,6 @@
 <?php
 
-namespace Middleware;
+namespace Knovators\HttpLogger\Src\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ use logger\LogWriter;
 
 /**
  * Class HttpLogger
- * @package knovators\logger\src\Middleware
+ * @package Knovators\HttpLogger\Src\Middleware
  */
 class HttpLogger
 {

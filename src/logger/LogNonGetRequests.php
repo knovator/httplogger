@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 /**
  * Class LogNonGetRequests
- * @package knovators\logger\src
+ * @package logger
  */
 class LogNonGetRequests implements LogProfile
 {
