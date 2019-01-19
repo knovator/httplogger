@@ -1,6 +1,6 @@
 <?php
 
-namespace logger;
+namespace Knovators\HttpLogger;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -31,6 +31,7 @@ class DefaultLogWriter implements LogWriter
         $message = "{$method} {$uri} - Body: {$bodyAsJson} - Files: " . implode(', ', $files);
 
         $channel = config('http-logger.log_channel');
+
 
         Log::channel($channel)->info($message);
     }

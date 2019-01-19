@@ -1,6 +1,6 @@
 <?php
 
-namespace logger;
+namespace Knovators\HttpLogger;
 
 use Illuminate\Http\Request;
 
