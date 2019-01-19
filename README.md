@@ -29,29 +29,28 @@ This is the contents of the published config file:
 ```php
 return [
 
-    /*
-     * The log profile which determines whether a request should be logged.
-     * It should implement `LogProfile`.
-     */
-    'log_profile' =>\knovators\logger\src\LogNonGetRequests::class,
-
-    /*
-     * The log writer used to write the request to a log.
-     * It should implement `LogWriter`.
-     */
-    'log_writer' =>  \knovators\logger\src\DefaultLogWriter::class,
-
-    /*
-     * Filter out body fields which will never be logged.
-     */
-    'except' => [
-        'password',
-        'password_confirmation',
-    ],
+   /*
+        * The log profile which determines whether a request should be logged.
+        * It should implement `LogProfile`.
+        */
+       'log_profile' => logger\LogNonGetRequests::class,
    
-    /* Default log channel.*/
-     
-    'log_channel' => 'custom_log',
+       /*
+        * The log writer used to write the request to a log.
+        * It should implement `LogWriter`.
+        */
+       'log_writer' => logger\DefaultLogWriter::class,
+   
+       /*
+        * Filter out body fields which will never be logged.
+        */
+       'except' => [
+           'password',
+           'password_confirmation',
+       ],
+   
+       /* Default log channel.*/
+       'log_channel' => 'custom_log',
 
 ];
 ```
@@ -66,7 +65,7 @@ This packages provides a middleware which can be added as a global middleware or
 protected $middleware = [
     // ...
     
-    \knovators\logger\src\Middlewares\HttpLogger::class
+    \knovators\http-logger\src\Middlewares\HttpLogger::class
 ];
 ```
 
@@ -75,7 +74,7 @@ protected $middleware = [
 
 Route::post('/submit-form', function () {
     //
-})->middleware(\knovators\logger\src\Middlewares\HttpLogger::class);
+})->middleware(\knovators\http-logger\src\Middlewares\HttpLogger::class);
 ```
 
 ### Logging
@@ -107,7 +106,7 @@ A custom log writer must implement `\knovators\logger\src\LogWriter`.
 This interface requires you to implement `logRequest`.
 
 ```php
-// Example implementation from `\knovators\logger\src\DefaultLogWriter`
+// Example implementation from `\knovators\http-logger\src\DefaultLogWriter`
 
 public function logRequest(Request $request): void
 {
