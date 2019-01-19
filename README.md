@@ -15,7 +15,7 @@ This log acts as an extra safety net for critical user submissions, such as form
 You can install the package via composer:
 
 ```bash
-composer require knovators/logger
+composer require knovators/httplogger
 ```
 
 Optionally you can publish the configfile with:
@@ -30,27 +30,15 @@ This is the contents of the published config file:
 return [
 
    /*
-        * The log profile which determines whether a request should be logged.
-        * It should implement `LogProfile`.
-        */
-       'log_profile' => logger\LogNonGetRequests::class,
-   
-       /*
-        * The log writer used to write the request to a log.
-        * It should implement `LogWriter`.
-        */
-       'log_writer' => logger\DefaultLogWriter::class,
-   
-       /*
-        * Filter out body fields which will never be logged.
-        */
-       'except' => [
-           'password',
-           'password_confirmation',
-       ],
-   
-       /* Default log channel.*/
-       'log_channel' => 'custom_log',
+       * Filter out body fields which will never be logged.
+       */
+      'except' => [
+          'password',
+          'password_confirmation',
+      ],
+  
+      /* Default log channel.*/
+      'log_channel' => 'custom_log',
 
 ];
 ```
@@ -65,7 +53,7 @@ This packages provides a middleware which can be added as a global middleware or
 protected $middleware = [
     // ...
     
-    \knovators\http-logger\src\Middlewares\HttpLogger::class
+    \Knovators\HttpLogger\Middleware\HttpLoggerMiddleware::class
 ];
 ```
 
@@ -74,7 +62,7 @@ protected $middleware = [
 
 Route::post('/submit-form', function () {
     //
-})->middleware(\knovators\http-logger\src\Middlewares\HttpLogger::class);
+})->middleware(\Knovators\HttpLogger\Middleware\HttpLoggerMiddleware::class);
 ```
 
 ### Logging
