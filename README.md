@@ -119,7 +119,9 @@ public function logRequest(Request $request): void
 
     $message = "{$method} {$uri} - {$bodyAsJson}";
 
-    Log::info($message);
+    $channel = config('http-logger.log_channel');
+    
+    Log::channel($channel)->info($message);
 }
 ```
 
