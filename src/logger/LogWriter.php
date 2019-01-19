@@ -1,12 +1,12 @@
 <?php
 
-namespace knovator\logger\src;
+namespace logger;
 
 use Illuminate\Http\Request;
 
 /**
  * Interface LogWriter
- * @package knovator\logger\src
+ * @package knovators\logger\src
  */
 interface LogWriter
 {

@@ -1,16 +1,16 @@
 <?php
 
-namespace knovator\logger\src\Middleware;
+namespace Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use knovator\logger\src\LogProfile;
-use knovator\logger\src\LogWriter;
+use logger\LogProfile;
+use logger\LogWriter;
 
 
 /**
  * Class HttpLogger
- * @package knovator\logger\src\Middleware
+ * @package knovators\logger\src\Middleware
  */
 class HttpLogger
 {

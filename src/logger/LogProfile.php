@@ -1,12 +1,12 @@
 <?php
 
-namespace knovator\logger\src;
+namespace logger;
 
 use Illuminate\Http\Request;
 
 /**
  * Interface LogProfile
- * @package knovator\logger\src
+ * @package knovators\logger\src
  */
 interface LogProfile
 {

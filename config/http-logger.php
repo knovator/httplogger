@@ -6,13 +6,13 @@ return [
      * The log profile which determines whether a request should be logged.
      * It should implement `LogProfile`.
      */
-    'log_profile' => \knovator\logger\src\LogNonGetRequests::class,
+    'log_profile' => logger\LogNonGetRequests::class,
 
     /*
      * The log writer used to write the request to a log.
      * It should implement `LogWriter`.
      */
-    'log_writer' => \knovator\logger\src\DefaultLogWriter::class,
+    'log_writer' => logger\DefaultLogWriter::class,
 
     /*
      * Filter out body fields which will never be logged.

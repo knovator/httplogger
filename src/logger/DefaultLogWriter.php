@@ -1,15 +1,14 @@
 <?php
 
-namespace knovator\logger\src;
+namespace logger;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use knovator\logger\src\LogWriter;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class DefaultLogWriter
- * @package knovator\logger
+ * @package knovators\logger
  */
 class DefaultLogWriter implements LogWriter
 {

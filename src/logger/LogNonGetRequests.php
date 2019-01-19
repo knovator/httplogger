@@ -1,12 +1,12 @@
 <?php
 
-namespace knovator\logger\src;
+namespace logger;
 
 use Illuminate\Http\Request;
 
 /**
  * Class LogNonGetRequests
- * @package knovator\logger\src
+ * @package knovators\logger\src
  */
 class LogNonGetRequests implements LogProfile
 {

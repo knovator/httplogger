@@ -1,12 +1,12 @@
 <?php
 
-namespace knovator\logger\src;
+namespace logger;
 
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class HttpLoggerServiceProvider
- * @package knovator\logger\src
+ * @package knovators\logger\src
  */
 class HttpLoggerServiceProvider extends ServiceProvider
 {
@@ -25,5 +25,6 @@ class HttpLoggerServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/http-logger.php', 'http-logger');
+        $this->merge(__DIR__ . '/../config/http-logger.php', 'http-logger');
     }
 }
