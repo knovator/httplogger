@@ -6,7 +6,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Knovators\\HttpLogger\\": "packages/knovators/httplogger/src"
+            "Knovators\\HttpLogger\\": "src"
         }
     }
 
