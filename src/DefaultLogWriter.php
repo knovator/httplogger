@@ -30,7 +30,7 @@ class DefaultLogWriter implements LogWriter
 
         $message = "{$method} {$uri} - Body: {$bodyAsJson}";
         if (!empty(implode(', ', $files))) {
-            $message .= " - Files: \" . implode(', ', $files)";
+            $message .= " - Files: " . implode(', ', $files);
         }
 
         if (auth()->guard('api')->check()) {
