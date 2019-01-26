@@ -32,7 +32,7 @@ class DefaultLogWriter implements LogWriter
 
         $channel = config('http-logger.log_channel');
 
-
-        Log::channel($channel)->info($message);
+        Log::channel($channel)->info('hello');
+//        Log::channel($channel)->info($message);
     }
 }

@@ -3,5 +3,11 @@
     "description": "This is http logger description",
     "type": "project",
     "minimum-stability": "dev",
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Knovators\\HttpLogger\\": "packages/knovators/httplogger/src"
+        }
+    }
+
 }
