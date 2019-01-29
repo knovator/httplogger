@@ -24,7 +24,6 @@ class DefaultLogWriter implements LogWriter
         $bodyAsJson = json_encode($request->except(config('http-logger.except')));
         $this->uploadedFiles($request->files, $fileNames);
         $message = "{$method} {$uri} - Body: {$bodyAsJson}";
-        dd($fileNames);
         if (!empty($fileNames)) {
             $message .= " - Files: " . implode(', ', $fileNames);
         }
@@ -39,5 +38,23 @@ class DefaultLogWriter implements LogWriter
         $channel = config('http-logger.log_channel');
 
         Log::channel($channel)->info($message);
+    }
+
+
+    /**
+     * @param $requestFiles
+     * @param $fileNames
+     */
+    private function uploadedFiles($requestFiles, &$fileNames) {
+        array_map(function ($files) use (&$fileNames) {
+            if (is_array($files)) {
+                $this->uploadedFiles($files, $fileNames);
+            } else {
+                /** @var UploadedFile $files */
+                array_push($fieNames, $files->getClientOriginalName());
+            }
+
+        }, iterator_to_array($requestFiles));
+
     }
 }
