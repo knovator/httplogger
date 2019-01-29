@@ -46,15 +46,19 @@ class DefaultLogWriter implements LogWriter
      * @param $fileNames
      */
     private function uploadedFiles($requestFiles, &$fileNames) {
+        if (!is_array($requestFiles)) {
+            $requestFiles = iterator_to_array($requestFiles);
+        }
         array_map(function ($files) use (&$fileNames) {
             if (is_array($files)) {
                 $this->uploadedFiles($files, $fileNames);
             } else {
                 /** @var UploadedFile $files */
-                array_push($fieNames, $files->getClientOriginalName());
+                array_push($fileNames,$files->getClientOriginalName());
+
             }
 
-        }, iterator_to_array($requestFiles));
+        }, $requestFiles);
 
     }
 }
