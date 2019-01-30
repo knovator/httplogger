@@ -12,16 +12,43 @@ This log acts as an extra safety net for critical user submissions, such as form
 
 ## Installation
 
+You want to need add http logger repository in your composer.json file. 
+```
+"repositories": [
+       {
+           "type": "vcs",
+           "url": "http://git.knovator.in/knovators/logger.git"
+       }
+   ],
+```
+
+Disable or add secure http flag in your composer.json file.
+
+```
+"config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "secure-http":false
+    },
+```
+
 You can install the package via composer:
 
 ```bash
-composer require knovators/httplogger
+composer require knovators/httplogger "1.0.*"
 ```
 
-Optionally you can publish the configfile with:
+You want to need add HttpLoggerServiceProvider provider in config/app.php. 
+```
+    Knovators\HttpLogger\HttpLoggerServiceProvider::class,
+```
+
+
+Optionally you can publish the config file with:
 
 ```bash
-php artisan vendor:publish --provider="knovators\logger\src\HttpLoggerServiceProvider" --tag="config" 
+php artisan vendor:publish --tag=config 
 ```
 
 This is the contents of the published config file:
@@ -32,13 +59,23 @@ return [
    /*
        * Filter out body fields which will never be logged.
        */
-      'except' => [
-          'password',
-          'password_confirmation',
-      ],
-  
-      /* Default log channel.*/
-      'log_channel' => 'custom_log',
+       'except'      => [
+           'password',
+           'password_confirmation',
+       ],
+   
+       /* Default log channel.*/
+       'log_channel' => 'custom_log',
+   
+   
+        /* logged user columns */
+       'action_by_columns' => [
+           'id',
+           'first_name',
+           'last_name',
+           'email',
+           'phone'
+       ],
 
 ];
 ```
@@ -57,13 +94,17 @@ protected $middleware = [
 ];
 ```
 
-```php
-// in a routes file
+Add channel in your configuration file .
 
-Route::post('/submit-form', function () {
-    //
-})->middleware(\Knovators\HttpLogger\Middleware\HttpLoggerMiddleware::class);
+```php
+// in `config/logging.php`
+
+    'custom_log' => [
+            'driver' => 'daily',
+            'path'   => env('HTTP_LOGGER_FILE_NAME') ? storage_path('logs/' . env('HTTP_LOGGER_FILE_NAME') . '.log') : storage_path('logs/laravel.log'),
+        ],
 ```
+
 
 ### Logging
 
@@ -96,26 +137,28 @@ This interface requires you to implement `logRequest`.
 ```php
 // Example implementation from `\knovators\http-logger\src\DefaultLogWriter`
 
-public function logRequest(Request $request): void
-{
-    $method = strtoupper($request->getMethod());
-    
-    $uri = $request->getPathInfo();
-    
-    $bodyAsJson = json_encode($request->except(config('http-logger.except')));
+public function logRequest(Request $request) {
+        $fileNames = [];
+        $method = strtoupper($request->getMethod());
+        $uri = $request->getPathInfo();
+        $bodyAsJson = json_encode($request->except(config('http-logger.except')));
+        $this->uploadedFiles($request->files, $fileNames);
+        $message = "{$method} {$uri} - Body: {$bodyAsJson}";
+        if (!empty($fileNames)) {
+            $message .= " - Files: " . implode(', ', $fileNames);
+        }
 
-    $message = "{$method} {$uri} - {$bodyAsJson}";
+        if (auth()->guard('api')->check()) {
+            $user = auth()->guard('api')->user()->first(config('http-logger.action_by_columns'))
+                          ->toArray();
+            $userBody = json_encode($user);
+            $message .= " - Action By: {$userBody}";
+        }
 
-    $channel = config('http-logger.log_channel');
-    
-    Log::channel($channel)->info($message);
-}
-```
+        $channel = config('http-logger.log_channel');
 
-### Testing
-
-``` bash
-composer test
+        Log::channel($channel)->info($message);
+    }
 ```
 
 ### Changelog
