@@ -12,13 +12,40 @@ This log acts as an extra safety net for critical user submissions, such as form
 
 ## Installation
 
+You want to need add http logger repository in your composer.json file. 
+```
+"repositories": [
+       {
+           "type": "vcs",
+           "url": "http://git.knovator.in/knovators/logger.git"
+       }
+   ],
+```
+
+Disable or add secure http flag in your composer.json file.
+
+```
+"config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "secure-http":false
+    },
+```
+
 You can install the package via composer:
 
 ```bash
 composer require knovators/httplogger "1.0.*"
 ```
 
-Optionally you can publish the configfile with:
+You want to need add HttpLoggerServiceProvider provider in config/app.php. 
+```
+    Knovators\HttpLogger\HttpLoggerServiceProvider::class,
+```
+
+
+Optionally you can publish the config file with:
 
 ```bash
 php artisan vendor:publish --tag=config 
@@ -110,35 +137,28 @@ This interface requires you to implement `logRequest`.
 ```php
 // Example implementation from `\knovators\http-logger\src\DefaultLogWriter`
 
-public function logRequest(Request $request): void
-{
-      $method = strtoupper($request->getMethod());
-    
-      $uri = $request->getPathInfo();
-    
-    
-      $bodyAsJson = json_encode($request->except(config('http-logger.except')));
-    
-      $files = array_map(function (UploadedFile $file) {
-          return $file->getClientOriginalName();
-      }, iterator_to_array($request->files));
-    
-      $message = "{$method} {$uri} - Body: {$bodyAsJson}";
-      
-      if (!empty(implode(', ', $files))) {
-          $message .= " - Files: " . implode(', ', $files);
-      }
-    
-       if (auth()->guard('api')->check()) {
-           $user = auth()->guard('api')->user()->first(config('http-logger.action_by_columns'))->toArray();
-           $userBody = json_encode($user);
-           $message .= " - Action By: {$userBody}";
-       }
-    
-       $channel = config('http-logger.log_channel');
-    
-       Log::channel($channel)->info($message);
-}
+public function logRequest(Request $request) {
+        $fileNames = [];
+        $method = strtoupper($request->getMethod());
+        $uri = $request->getPathInfo();
+        $bodyAsJson = json_encode($request->except(config('http-logger.except')));
+        $this->uploadedFiles($request->files, $fileNames);
+        $message = "{$method} {$uri} - Body: {$bodyAsJson}";
+        if (!empty($fileNames)) {
+            $message .= " - Files: " . implode(', ', $fileNames);
+        }
+
+        if (auth()->guard('api')->check()) {
+            $user = auth()->guard('api')->user()->first(config('http-logger.action_by_columns'))
+                          ->toArray();
+            $userBody = json_encode($user);
+            $message .= " - Action By: {$userBody}";
+        }
+
+        $channel = config('http-logger.log_channel');
+
+        Log::channel($channel)->info($message);
+    }
 ```
 
 ### Changelog
