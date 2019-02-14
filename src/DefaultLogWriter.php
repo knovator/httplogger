@@ -36,7 +36,7 @@ class DefaultLogWriter implements LogWriter
             $userBody = json_encode($user);
             $message .= " - Action By: {$userBody}";
         }
-        
+
 
         $channel = config('http-logger.log_channel');
 

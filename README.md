@@ -137,15 +137,16 @@ This interface requires you to implement `logRequest`.
 ```php
 // Example implementation from `\knovators\http-logger\src\DefaultLogWriter`
 
-public function logRequest(Request $request) {
+ public function logRequest(Request $request) {
         $fileNames = [];
         $method = strtoupper($request->getMethod());
         $uri = $request->getPathInfo();
-        $bodyAsJson = json_encode($request->except(config('http-logger.except')));
+        $bodyAsJson = json_encode($this->input($request, config('http-logger.except')));
+        $message = "{$method} {$uri} - Action From: {$this->clientInformation($request)} - Body: {$bodyAsJson}";
         $this->uploadedFiles($request->files, $fileNames);
-        $message = "{$method} {$uri} - Body: {$bodyAsJson}";
+
         if (!empty($fileNames)) {
-            $message .= " - Files: " . implode(', ', $fileNames);
+            $message .= " - Files: " . json_encode($fileNames);
         }
 
         if (auth()->guard('api')->check()) {
@@ -154,6 +155,7 @@ public function logRequest(Request $request) {
             $userBody = json_encode($user);
             $message .= " - Action By: {$userBody}";
         }
+        
 
         $channel = config('http-logger.log_channel');
 
