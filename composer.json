@@ -1,12 +1,12 @@
 {
-    "name": "knovators/httplogger",
+    "name": "knovator/httplogger",
     "description": "This is http logger description",
     "type": "project",
     "minimum-stability": "dev",
     "require": {},
     "autoload": {
         "psr-4": {
-            "Knovators\\HttpLogger\\": "src/"
+            "Knovator\\HttpLogger\\": "src/"
         }
     }
 
