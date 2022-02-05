@@ -17,7 +17,7 @@ You want to need add http logger repository in your composer.json file.
 "repositories": [
        {
            "type": "vcs",
-           "url": "http://git.knovator.in/knovators/logger.git"
+           "url": "http://github.com/knovator/logger.git"
        }
    ],
 ```
@@ -36,12 +36,12 @@ Disable or add secure http flag in your composer.json file.
 You can install the package via composer:
 
 ```bash
-composer require knovators/httplogger "1.0.*"
+composer require knovator/httplogger "1.0.*"
 ```
 
 You want to need add HttpLoggerServiceProvider provider in config/app.php. 
 ```
-    Knovators\HttpLogger\HttpLoggerServiceProvider::class,
+    Knovator\HttpLogger\HttpLoggerServiceProvider::class,
 ```
 
 
@@ -90,7 +90,7 @@ This packages provides a middleware which can be added as a global middleware or
 protected $middleware = [
     // ...
     
-    \Knovators\HttpLogger\Middleware\HttpLoggerMiddleware::class
+    \Knovator\HttpLogger\Middleware\HttpLoggerMiddleware::class
 ];
 ```
 
@@ -119,11 +119,11 @@ and it will write to the default Laravel logger.
 You're free to implement your own log profile and/or log writer classes, 
 and configure it in `config/http-logger.php`.
 
-A custom log profile must implement `\knovators\logger\src\LogProfile`. 
+A custom log profile must implement `\knovator\logger\src\LogProfile`. 
 This interface requires you to implement `shouldLogRequest`.
 
 ```php
-// Example implementation from `\knovators\logger\src\LogNonGetRequests`
+// Example implementation from `\knovator\logger\src\LogNonGetRequests`
 
 public function shouldLogRequest(Request $request): bool
 {
@@ -131,11 +131,11 @@ public function shouldLogRequest(Request $request): bool
 }
 ```
 
-A custom log writer must implement `\knovators\logger\src\LogWriter`. 
+A custom log writer must implement `\knovator\logger\src\LogWriter`. 
 This interface requires you to implement `logRequest`.
 
 ```php
-// Example implementation from `\knovators\http-logger\src\DefaultLogWriter`
+// Example implementation from `\knovator\http-logger\src\DefaultLogWriter`
 
  public function logRequest(Request $request) {
         $fileNames = [];
